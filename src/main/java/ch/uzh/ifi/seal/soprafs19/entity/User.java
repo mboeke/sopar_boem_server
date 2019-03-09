@@ -1,8 +1,10 @@
 package ch.uzh.ifi.seal.soprafs19.entity;
 
 import ch.uzh.ifi.seal.soprafs19.constant.UserStatus;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +19,7 @@ public class User implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private long id;
 	
 	@Column(nullable = false)
 	private String password;
@@ -28,6 +30,10 @@ public class User implements Serializable {
 	@Column(nullable = false, unique = true) 
 	private String token;
 
+	@Column(nullable = false, unique = true, updatable = false)
+	@CreationTimestamp
+	private LocalDateTime creation_date;
+
 	@Column(nullable = false)
 	private UserStatus status;
 
@@ -35,8 +41,12 @@ public class User implements Serializable {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
+	}
+
+	public LocalDateTime getCreation_date(){
+		return creation_date;
 	}
 
 	public String getPassword() {

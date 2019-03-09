@@ -9,6 +9,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	User findByPassword(String password);
 	User findByUsername(String username);
 	User findByToken(String token);
+	User findById(long id);
+	Boolean existsById(long id);
+	Boolean existsByUsername(String username);
+	Boolean existsByPassword(String password);
 }
-
-//some change
