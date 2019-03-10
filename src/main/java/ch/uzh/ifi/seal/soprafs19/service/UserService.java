@@ -94,6 +94,36 @@ public class UserService {
         }
     }
 
+    public Boolean updateUserData (User currentUser){ //throws Exception if user not existing in database
+
+        if(userRepository.existsById(currentUser.getId())){
+            User temp_user = getUserById(currentUser.getId());
+
+            temp_user.setUsername(currentUser.getUsername());
+            temp_user.setBirthday_date(currentUser.getBirthday_date());
+            userRepository.save(temp_user);
+
+            /*
+            System.out.println("Usernname: "+currentUser.getUsername());
+
+            temp_user.setUsername(currentUser.getUsername());
+            System.out.println("Birthday: "+currentUser.getBirthday_date());
+            temp_user.setBirthday_date(currentUser.getBirthday_date());
+            temp_user.setId(currentUser.getId());
+
+            temp_user.setPassword(userRepository.findById(currentUser.getId()));
+            temp_user.setStatus(UserStatus.ONLINE);
+            temp_user.setToken(currentUser.getToken());
+            */
+
+            //userRepository.delete(currentUser);
+            //userRepository.save(temp_user);
+            return true;
+        }else{
+            throw new UnknownUserException("This user doesn't exist and can therefore not be updated");
+        }
+    }
+
     public Boolean existUser(long id){
         return userRepository.existsById(id);
     }
@@ -101,4 +131,6 @@ public class UserService {
     public User existUsername(String username){
         return userRepository.findByUsername(username);
     }
+
+    public User getUserById(long id) { return userRepository.findById(id);}
 }

@@ -40,4 +40,10 @@ public class UserController {
     User returnUserData(@PathVariable(value="id") long id) throws UnknownUserException {
         return this.service.findUserById(id);
     }
+
+    //Update user_data according to input on edit page
+    @PostMapping("/users/{id}/edit")
+    Boolean updateUserData(@RequestBody User newUser) throws UnknownUserException{
+        return this.service.updateUserData(newUser);
+    }
 }

@@ -19,9 +19,10 @@ public class User implements Serializable {
 
 	@Id
 	@GeneratedValue
+	@Column(nullable = false, unique = true, updatable = false)
 	private long id;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, updatable = false)
 	private String password;
 	
 	@Column(nullable = false, unique = true) 
@@ -34,7 +35,6 @@ public class User implements Serializable {
 	@CreationTimestamp
 	private LocalDateTime creation_date;
 
-	@Column
 	private String birthday_date;
 
 	@Column(nullable = false)
