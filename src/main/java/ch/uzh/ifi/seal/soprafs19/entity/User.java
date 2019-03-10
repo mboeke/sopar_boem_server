@@ -34,6 +34,9 @@ public class User implements Serializable {
 	@CreationTimestamp
 	private LocalDateTime creation_date;
 
+	@Column
+	private String birthday_date;
+
 	@Column(nullable = false)
 	private UserStatus status;
 
@@ -47,6 +50,14 @@ public class User implements Serializable {
 
 	public LocalDateTime getCreation_date(){
 		return creation_date;
+	}
+
+	public String getBirthday_date() {
+		return birthday_date;
+	}
+
+	public void setBirthday_date(String birthday_date) {
+		this.birthday_date = birthday_date;
 	}
 
 	public String getPassword() {

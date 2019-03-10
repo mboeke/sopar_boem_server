@@ -35,6 +35,7 @@ public class UserController {
         return this.service.createUser(newUser);
     }
 
+    //Getting user data for user details page
     @GetMapping("/users/{id}") //getting value from url
     User returnUserData(@PathVariable(value="id") long id) throws UnknownUserException {
         return this.service.findUserById(id);
