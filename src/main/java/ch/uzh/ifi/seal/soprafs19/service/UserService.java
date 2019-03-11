@@ -103,21 +103,6 @@ public class UserService {
             temp_user.setBirthday_date(currentUser.getBirthday_date());
             userRepository.save(temp_user);
 
-            /*
-            System.out.println("Usernname: "+currentUser.getUsername());
-
-            temp_user.setUsername(currentUser.getUsername());
-            System.out.println("Birthday: "+currentUser.getBirthday_date());
-            temp_user.setBirthday_date(currentUser.getBirthday_date());
-            temp_user.setId(currentUser.getId());
-
-            temp_user.setPassword(userRepository.findById(currentUser.getId()));
-            temp_user.setStatus(UserStatus.ONLINE);
-            temp_user.setToken(currentUser.getToken());
-            */
-
-            //userRepository.delete(currentUser);
-            //userRepository.save(temp_user);
             return true;
         }else{
             throw new UnknownUserException("This user doesn't exist and can therefore not be updated");
