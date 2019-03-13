@@ -19,36 +19,30 @@ public class UserController {
 
     UserRepository userRepository;
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/users")
     Iterable<User> all() {
         return service.getUsers();
     }
 
     //Login
-    @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping("/users/login")
     User loginUser(@RequestBody User userToAuthenticate) throws UnknownUserException, IncorrectPasswordException{
         return this.service.loginUser(userToAuthenticate);
     }
 
     //Registration
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/users/register")
     User createUser(@RequestBody User newUser) {
         return this.service.createUser(newUser);
     }
 
     //Getting user data for user details page
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/users/{id}") //getting value from url
     User returnUserData(@PathVariable(value="id") long id) throws UnknownUserException {
         return this.service.findUserById(id);
     }
 
     //Update user_data according to input on edit page
-    //@ResponseStatus(HttpStatus.NO_CONTENT) --> causing error response which is being catch by frontend function update_users_data()
-    //@ResponseStatus(HttpStatus.NOT_FOUND)
     @PutMapping("/users/{id}/edit")
     Boolean updateUserData(@RequestBody User newUser) throws UnknownUserException{
         return this.service.updateUserData(newUser);
