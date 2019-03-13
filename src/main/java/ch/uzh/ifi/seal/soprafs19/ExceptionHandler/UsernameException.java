@@ -1,9 +1,12 @@
 package ch.uzh.ifi.seal.soprafs19.ExceptionHandler;
 
-public class UsernameException extends RuntimeException{
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+public class UsernameException extends ResponseStatusException {
 
     public UsernameException(String errorMessage){
-        super(errorMessage);
+        super(HttpStatus.CONFLICT, errorMessage);
     }
 }
 

@@ -9,11 +9,13 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ch.uzh.ifi.seal.soprafs19.ExceptionHandler.UsernameException;
 import ch.uzh.ifi.seal.soprafs19.ExceptionHandler.UnknownUserException;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Base64;
 import java.util.UUID;
@@ -104,6 +106,12 @@ public class UserService {
         }else{
             throw new UnknownUserException("This user doesn't exist and can therefore not be updated");
         }
+    }
+
+    public Boolean deleteUser (long id){
+        User user_to_be_deleted = userRepository.findById(id);
+        userRepository.delete(user_to_be_deleted);
+        return userRepository.existsById(id);
     }
 
     public Boolean existUser(long id){

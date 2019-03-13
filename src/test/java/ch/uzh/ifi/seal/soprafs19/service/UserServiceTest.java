@@ -32,6 +32,8 @@ public class UserServiceTest {
     @Autowired
     private UserService userService;
 
+    //add a new user
+    //adding new user failed because username already exists
     @Test
     public void createUser() {
         Assert.assertNull(userRepository.findByUsername("testUsername"));
@@ -45,5 +47,19 @@ public class UserServiceTest {
         Assert.assertNotNull(createdUser.getToken());
         Assert.assertEquals(createdUser.getStatus(),UserStatus.ONLINE);
         Assert.assertEquals(createdUser, userRepository.findByToken(createdUser.getToken()));
+    }
+
+    //display user profile with userId by GETting user object
+    //displaying user profile failed because userId was not found
+    @Test
+    public void getUserData(){
+
+    }
+
+    //update user profile with new values for username and birthday_date
+    //updating user profile failed because userId of new values for username and birthday_date were not found
+    @Test
+    public void updateUserData(){
+        
     }
 }
