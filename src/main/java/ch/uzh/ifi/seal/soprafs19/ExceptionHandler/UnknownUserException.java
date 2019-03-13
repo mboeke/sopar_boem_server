@@ -8,5 +8,4 @@ public class UnknownUserException extends ResponseStatusException {
     public UnknownUserException(String errorMessage){
         super(HttpStatus.NOT_FOUND, errorMessage);
     }
-
 }

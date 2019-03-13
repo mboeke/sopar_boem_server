@@ -26,8 +26,7 @@ public class UserController {
     }
 
     //Login
-    //@ResponseStatus(HttpStatus.ACCEPTED)
-    @ResponseStatus(code=HttpStatus.NOT_ACCEPTABLE, reason = "Password incorrect, please double check")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping("/users/login")
     User loginUser(@RequestBody User userToAuthenticate) throws UnknownUserException, IncorrectPasswordException{
         return this.service.loginUser(userToAuthenticate);
@@ -48,7 +47,8 @@ public class UserController {
     }
 
     //Update user_data according to input on edit page
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    //@ResponseStatus(HttpStatus.NO_CONTENT) --> causing error response which is being catch by frontend function update_users_data()
+    //@ResponseStatus(HttpStatus.NOT_FOUND)
     @PutMapping("/users/{id}/edit")
     Boolean updateUserData(@RequestBody User newUser) throws UnknownUserException{
         return this.service.updateUserData(newUser);

@@ -8,8 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ch.uzh.ifi.seal.soprafs19.ExceptionHandler.UsernameException;
@@ -49,7 +47,9 @@ public class UserService {
         return Base64.getEncoder().encodeToString(json.toString().getBytes());
     }
 
-    public User loginUser(User userToAuthenticate) throws UnknownUserException, IncorrectPasswordException{ //throw Exception for a) unknown user & b) incorrect password
+    //verify that user is authorized to login and authenticate user respectively
+    //throw Exception for a) unknown user & b) incorrect password
+    public User loginUser(User userToAuthenticate) throws UnknownUserException, IncorrectPasswordException{
         String username = userToAuthenticate.getUsername();
         String password = userToAuthenticate.getPassword();
 
@@ -68,6 +68,7 @@ public class UserService {
         }
     }
 
+    //setup a new User entity for the user newUser
     public User createUser(User newUser) {
         if(userRepository.findByUsername(newUser.getUsername()) != null){
             throw new UsernameException("The username is already taken please choose another one");
@@ -93,6 +94,7 @@ public class UserService {
         }
     }
 
+    //update an existing user entity with provided data
     public Boolean updateUserData (User currentUser){ //throws Exception if user not existing in database
 
         if(userRepository.existsById(currentUser.getId())){
@@ -108,18 +110,16 @@ public class UserService {
         }
     }
 
+    //delete an existing user
     public Boolean deleteUser (long id){
         User user_to_be_deleted = userRepository.findById(id);
-        userRepository.delete(user_to_be_deleted);
-        return userRepository.existsById(id);
-    }
+        if(user_to_be_deleted != null){
+            userRepository.delete(user_to_be_deleted);
+            return userRepository.existsById(id);
+        }else{
+            throw new UnknownUserException("This user doesn't exist and can therefore not be deleted");
+        }
 
-    public Boolean existUser(long id){
-        return userRepository.existsById(id);
-    }
-
-    public User existUsername(String username){
-        return userRepository.findByUsername(username);
     }
 
     public User getUserById(long id) { return userRepository.findById(id);}
