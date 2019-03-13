@@ -42,7 +42,7 @@ public class UserController {
     }
 
     //Update user_data according to input on edit page
-    @PostMapping("/users/{id}/edit")
+    @PutMapping("/users/{id}/edit")
     Boolean updateUserData(@RequestBody User newUser) throws UnknownUserException{
         return this.service.updateUserData(newUser);
     }

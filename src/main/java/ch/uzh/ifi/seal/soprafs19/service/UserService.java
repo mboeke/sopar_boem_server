@@ -44,10 +44,7 @@ public class UserService {
         json.put("user_id", user_id);
 
         //creating and encoding token
-        String token = Base64.getEncoder().encodeToString(json.toString().getBytes());
-        return token;
-        //newUser.setToken(token);
-        //userRepository.save(newUser);
+        return Base64.getEncoder().encodeToString(json.toString().getBytes());
     }
 
     public User loginUser(User userToAuthenticate) throws UnknownUserException, IncorrectPasswordException{ //throw Exception for a) unknown user & b) incorrect password
