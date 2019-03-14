@@ -35,27 +35,4 @@ public class Application {
             }
         };
     }
-
-    @Bean
-    public CommandLineRunner demo(UserRepository repository) {
-        return (args) -> {
-            UserService service = new UserService(repository);
-            // save a couple of Users
-            String[] testUsers = {"hans","nöbi","tobi"};
-            for (String username:testUsers) {
-                User user = new User();
-                user.setUsername(username);
-                user.setPassword("asdfasdf");
-                service.createUser(user);
-            }
-
-            // fetch all users
-            log.info("Users found with findAll():");
-            log.info("-------------------------------");
-            for (User user : repository.findAll()) {
-                log.info(user.toString());
-            }
-            log.info("");
-        };
-    }
 }
