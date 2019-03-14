@@ -58,42 +58,85 @@ public class UserControllerTest {
         test1.setUsername("first test user");
         test1.setPassword("first_pw");
         userService.createUser(test1);
-        this.mockmvc.perform(post("/users/login").contentType(MediaType.APPLICATION_JSON)
+        this.mockmvc.perform(post("/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"username\": \"first test user\", \"password\": \"first_pw\"}"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.token", notNullValue()))
                 .andExpect(jsonPath("$.id", notNullValue())); //jsonPath accessing json
-    }
-
-    //login user failed
-    @Test
-    public void already_existing_username_error(){
-
+        userService.deleteUser(test1.getId());
     }
 
     @Test
-    public void incorrect_password_error(){
-
-    }
-
-    @Test
-    public void get_all_users_valid() throws Exception{
+    public void post_register_User() throws Exception {
+        this.mockmvc.perform(post("/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\": \"first test user\", \"password\": \"first_pw\"}"))
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.token", notNullValue()));
 
     }
 
     @Test
     public void get_all_users_invalid() throws Exception{
+        this.mockmvc.perform(get("/users")
+                .header("Authorization", "wrong_token"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(status().is(401));
+    }
+
+    @Test
+    public void get_all_users_valid() throws Exception{
+        User test1 = new User();
+        test1.setUsername("test1");
+        test1.setPassword("test_password");
+        userService.createUser(test1);
+        userService.loginUser(test1);
+        this.mockmvc.perform(get("/users")
+                .header("Authorization", userService.findUserById(test1.getId()).getToken()))
+                .andExpect(status().is(200))
+                .andExpect(content().contentType("application/json;charset=UTF-8"));
 
     }
 
-    //display user profile with userId by GETting user object
-    //displaying user profile failed because userId was not found
+    @Test
+    public void get_specific_user_valid() throws Exception{
+        User test1 = new User();
+        test1.setUsername("test1");
+        test1.setPassword("test_password");
+        userService.createUser(test1);
+        userService.loginUser(test1);
+        this.mockmvc.perform(get("/users/"+test1.getId())
+                .header("Authorization", userService.findUserById(test1.getId()).getToken()))
+                .andExpect(status().isOk())
+                .andExpect(status().is(200))
+                .andExpect(content().contentType("application/json;charset=UTF-8"));
+        userService.deleteUser(test1.getId());
+    }
 
+    @Test
+    public void get_specific_user_invalid() throws Exception{
+        this.mockmvc.perform(get("/users/")
+                .header("Authorization", "wrong_token"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(status().is(401));
 
-    //update user profile with new values for username and birthday_date
-    //updating user profile failed because userId of new values for username and birthday_date were not found
+    }
 
-    //exceptions rather to be tested in controllertest:
-
+    @Test
+    public void put_update_user_valid() throws Exception{
+        User test1 = new User();
+        test1.setUsername("test1");
+        test1.setPassword("test_password");
+        userService.createUser(test1);
+        this.mockmvc.perform(put("/users/"+test1.getId()+"/edit")
+                .header("Authorization", userService.findUserById(test1.getId()).getToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"id\": \""+test1.getId()+"\", \"username\": \"new username\", \"birthday_date\": \"2019-02-14\"}"))
+                .andExpect(status().isOk())
+                .andExpect(status().is(200))
+                .andExpect(content().contentType("application/json;charset=UTF-8"));
+        userService.deleteUser(test1.getId());
+    }
 }
