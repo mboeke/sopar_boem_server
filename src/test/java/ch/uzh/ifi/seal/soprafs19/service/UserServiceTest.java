@@ -186,7 +186,7 @@ public class UserServiceTest {
         Assert.assertNotNull("Username is null",test1.getUsername());
 
         userService.deleteUser(test1.getId());
-
-        Assert.assertNull("Username still exists", test1.getUsername());
+        System.out.println(test1.getUsername());
+        Assert.assertFalse(userRepository.existsById(test1.getId()));
     }
 }

@@ -44,23 +44,15 @@ public class UserControllerTest {
     @Autowired
     private UserController userController;
 
-    //add a new user
-    public void post_new_user_for_registration() throws Exception {
-        //this.mockmvc.perform(post("/users/register").contentType(MediaType.APPLICATION_JSON).content());
-
-    }
-    //adding new user failed because username already exists
-
-    //login user successful
     @Test
     public void post_user_for_login() throws Exception{
         User test1 = new User();
-        test1.setUsername("first test user");
+        test1.setUsername("first test");
         test1.setPassword("first_pw");
         userService.createUser(test1);
         this.mockmvc.perform(post("/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\": \"first test user\", \"password\": \"first_pw\"}"))
+                .content("{\"username\": \"first test\", \"password\": \"first_pw\"}"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.token", notNullValue()))
@@ -97,7 +89,7 @@ public class UserControllerTest {
                 .header("Authorization", userService.findUserById(test1.getId()).getToken()))
                 .andExpect(status().is(200))
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
-
+        userService.deleteUser(test1.getId());
     }
 
     @Test
