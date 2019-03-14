@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs19.controller;
 
 import ch.uzh.ifi.seal.soprafs19.ExceptionHandler.IncorrectPasswordException;
+import ch.uzh.ifi.seal.soprafs19.ExceptionHandler.UnauthorizedException;
 import ch.uzh.ifi.seal.soprafs19.ExceptionHandler.UnknownUserException;
 import ch.uzh.ifi.seal.soprafs19.entity.User;
 import ch.uzh.ifi.seal.soprafs19.repository.UserRepository;
@@ -20,8 +21,15 @@ public class UserController {
     UserRepository userRepository;
 
     @GetMapping("/users")
-    Iterable<User> all() {
-        return service.getUsers();
+    Iterable<User> all( //add authorization token in Frontend --> DONE
+            @RequestHeader(value = "Authorization",defaultValue = "") String token
+    ) {
+        if(service.authorized_user(token)){
+            return service.getUsers();
+        }else{
+            throw new UnauthorizedException("User is not authorized to get all users");
+        }
+
     }
 
     //Login
@@ -37,14 +45,23 @@ public class UserController {
     }
 
     //Getting user data for user details page
-    @GetMapping("/users/{id}") //getting value from url
-    User returnUserData(@PathVariable(value="id") long id) throws UnknownUserException {
-        return this.service.findUserById(id);
+    @GetMapping("/users/{id}") //add authorization token in Frontend --> DONE
+    User returnUserData(@PathVariable long id, @RequestHeader(value = "Authorization",defaultValue = "") String token) throws UnknownUserException {
+        if(service.authorized_user(token)){
+            return this.service.findUserById(id);
+        }else{
+            throw new UnauthorizedException("User is not authorized to get user data");
+        }
     }
 
     //Update user_data according to input on edit page
-    @PutMapping("/users/{id}/edit")
-    Boolean updateUserData(@RequestBody User newUser) throws UnknownUserException{
-        return this.service.updateUserData(newUser);
+    @PutMapping("/users/{id}/edit") //add authorization token in Frontend
+    Boolean updateUserData(@RequestBody User newUser, @RequestHeader(value = "Authorization",defaultValue = "") String token) throws UnknownUserException{
+        if(service.authorized_user(token)){
+            return this.service.updateUserData(newUser);
+        }else{
+            throw new UnauthorizedException("User is not authorized to update users");
+        }
+
     }
 }

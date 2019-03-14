@@ -123,4 +123,8 @@ public class UserService {
     }
 
     public User getUserById(long id) { return userRepository.findById(id);}
+
+    public Boolean authorized_user(String token){
+        return userRepository.existsByToken(token);
+    }
 }
